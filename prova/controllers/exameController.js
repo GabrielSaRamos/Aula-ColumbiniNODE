@@ -15,16 +15,14 @@ router.get('/', async (req,res) => {
 router.get('/:id', async (req,res) => {
     try{
         const {id} = req.params;
-        const exame = await Exame.findOne({_id: id});
+        const exame = await Exame.findOne({_id: id}).populate("id_cliente");
 
         if (!exame) {
-            res.status(422).json({ mensagem: "Cliente não encontrado" });
+            res.status(422).json({ mensagem: "Exame não encontrado" });
             return;
         }
 
-        const clientes = await Cliente.find({turmaId: id});
-
-        res.status(200).json({exame, clientes});
+        res.status(200).json({exame});
     } catch(error) {
         res.status(500).json({error});
     }
